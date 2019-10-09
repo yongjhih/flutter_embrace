@@ -18,7 +18,6 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
     }
   }
 
-
   override fun onMethodCall(call: MethodCall, result: Result) {
       when (call.method) {
         "start" -> {
@@ -129,6 +128,7 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
           }
         }
         "logNetworkCall" -> {
+          Log.d(TAG, "logNetworkCall")
           result.complete(
             call.argumentOrNull<String>("url"),
             call.argumentOrNull<String>("method"),
@@ -151,6 +151,7 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
           }
         }
         "logNetworkError" -> {
+          Log.d(TAG, "logNetworkError")
           result.complete(
                   call.argumentOrNull<String>("url"),
                   call.argumentOrNull<String>("method"),
