@@ -14,6 +14,7 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
     @JvmStatic
     fun registerWith(registrar: Registrar) {
       val channel = MethodChannel(registrar.messenger(), "flutter_embrace")
+      Log.d(TAG, "registerWith: flutter_embrace")
       channel.setMethodCallHandler(FlutterEmbracePlugin(registrar))
     }
   }
