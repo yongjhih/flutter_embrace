@@ -113,6 +113,7 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
           }
         }
         "isStarted" -> {
+          Log.d(TAG, "isStarted")
           result.call {
             Embrace.getInstance().isStarted
           }
@@ -217,6 +218,7 @@ fun <R> Result.call(onConsumer: () -> R) {
 
 fun <T, R> Result.call(arg: T?, onSuccess: (T) -> R) {
   try {
+    Log.d(TAG, "${arg}")
     success(onSuccess(arg!!))
   } catch (e: Throwable) {
     Log.e(TAG, e.message, e)
@@ -226,6 +228,7 @@ fun <T, R> Result.call(arg: T?, onSuccess: (T) -> R) {
 
 fun <T> Result.complete(arg: T?, onComplete: (T) -> Unit) {
   try {
+    Log.d(TAG, "${arg}")
     onComplete(arg!!)
     success()
   } catch (e: Throwable) {
@@ -236,6 +239,7 @@ fun <T> Result.complete(arg: T?, onComplete: (T) -> Unit) {
 
 fun <T, T2> Result.complete(arg: T?, arg2: T2?, onComplete: (T, T2) -> Unit) {
   try {
+    Log.d(TAG, "${arg}")
     onComplete(arg!!, arg2!!)
     success()
   } catch (e: Throwable) {
@@ -252,6 +256,7 @@ fun <T, T2, T3, T4, T5, T6> Result.complete(arg: T?,
                                             arg6: T6?,
                                             onComplete: (T, T2, T3, T4, T5, T6) -> Unit) {
   try {
+    Log.d(TAG, "${arg}")
     onComplete(arg!!, arg2!!, arg3!!, arg4!!, arg5!!, arg6!!)
     success()
   } catch (e: Throwable) {
@@ -268,6 +273,7 @@ fun <T, T2, T3, T4, T5, T6, T7> Result.complete(arg: T?,
                             arg7: T7?,
                             onComplete: (T, T2, T3, T4, T5, T6, T7) -> Unit) {
   try {
+    Log.d(TAG, "${arg}")
     onComplete(arg!!, arg2!!, arg3!!, arg4!!, arg5!!, arg6!!, arg7!!)
     success()
   } catch (e: Throwable) {
