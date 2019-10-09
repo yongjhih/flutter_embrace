@@ -3,7 +3,8 @@
 ## Usage
 
 ```dart
-Text("${Embrace.isStarted}");
+final client = EmbractHttpClient();
+final res = await client.get('https://github.com/yongjhih/flutter_embrace');
 ```
 
 ref. https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart
