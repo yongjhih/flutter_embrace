@@ -28,8 +28,7 @@ class Embrace {
   static Future<void> logNetworkResponse(Response res, {
     DateTime startTime,
     DateTime endTime,
-  }) async =>
-    await logNetworkCall(
+  }) async => await logNetworkCall(
       url: res.request.url.toString(),
       method: res.request.method,
       statusCode: res.statusCode,
@@ -50,8 +49,7 @@ class Embrace {
     DateTime endTime,
     int bytesSent = 0,
     int bytesReceived = 0,
-  }) async {
-    await _channel.invokeMethod('logNetworkCall', {
+  }) async => await _channel.invokeMethod('logNetworkCall', {
       "url": url,
       "method": method,
       "statusCode": statusCode,
@@ -60,7 +58,6 @@ class Embrace {
       "bytesSent": bytesSent,
       "bytesReceived": bytesReceived,
     });
-  }
 
   static Future<void> logNetworkError({
     @required
@@ -71,8 +68,7 @@ class Embrace {
     DateTime endTime,
     String errorType = "",
     String errorMessage = "",
-  }) async {
-    await _channel.invokeMethod('logNetworkError', {
+  }) async => await _channel.invokeMethod('logNetworkError', {
       "url": url,
       "method": method,
       "startTime": (startTime ?? DateTime.now()).millisecondsSinceEpoch,
@@ -80,5 +76,4 @@ class Embrace {
       "errorType": errorType,
       "errorMessage": errorMessage,
     });
-  }
 }
