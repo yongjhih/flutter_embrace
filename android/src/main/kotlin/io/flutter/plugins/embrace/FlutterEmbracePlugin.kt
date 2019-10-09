@@ -1,6 +1,7 @@
 package io.flutter.plugins.embrace
 
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -125,13 +126,52 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
             Embrace.getInstance().clearUserIdentifier()
           }
         }
+        "logNetworkCall" -> {
+          result.complete(
+            call.argumentOrNull<String>("url"),
+            call.argumentOrNull<String>("method"),
+            call.argumentOrNull<Int>("statusCode"),
+            call.argumentOrNull<Long>("startTime"),
+            call.argumentOrNull<Long>("endTime"),
+            call.argumentOrNull<Long>("bytesSent"),
+            call.argumentOrNull<Long>("bytesReceived")
+          ) { url, method, statusCode, startTime, endTime, bytesSent, bytesReceived ->
+            Embrace.getInstance().logNetworkCall(
+                    url,
+                    HttpMethod.fromString(method),
+                    statusCode,
+                    startTime,
+                    endTime,
+                    bytesSent,
+                    bytesReceived
+            )
+          }
+        }
+        "logNetworkError" -> {
+          result.complete(
+                  call.argumentOrNull<String>("url"),
+                  call.argumentOrNull<String>("method"),
+                  call.argumentOrNull<Long>("startTime"),
+                  call.argumentOrNull<Long>("endTime"),
+                  call.argumentOrNull<String>("errorType"),
+                  call.argumentOrNull<String>("errorMessage")
+          ) { url, method, startTime, endTime, errorType, errorMessage ->
+            Embrace.getInstance().logNetworkClientError(
+                    url,
+                    HttpMethod.fromString(method),
+                    startTime,
+                    endTime,
+                    errorType,
+                    errorMessage
+            )
+          }
+        }
         else -> {
           result.notImplemented()
         }
       }
   }
 }
-
 
 fun <T> MethodCall.argumentOrNull(key: String): T? = try { argument(key) } catch (e: Throwable) { null }
 fun <T> MethodCall.argumentsOrNull(): T? = arguments() as? T?
@@ -181,6 +221,36 @@ fun <T> Result.complete(arg: T?, onComplete: (T) -> Unit) {
 fun <T, T2> Result.complete(arg: T?, arg2: T2?, onComplete: (T, T2) -> Unit) {
   try {
     onComplete(arg!!, arg2!!)
+    success()
+  } catch (e: Throwable) {
+    error(e)
+  }
+}
+
+fun <T, T2, T3, T4, T5, T6> Result.complete(arg: T?,
+                                            arg2: T2?,
+                                            arg3: T3?,
+                                            arg4: T4?,
+                                            arg5: T5?,
+                                            arg6: T6?,
+                                            onComplete: (T, T2, T3, T4, T5, T6) -> Unit) {
+  try {
+    onComplete(arg!!, arg2!!, arg3!!, arg4!!, arg5!!, arg6!!)
+    success()
+  } catch (e: Throwable) {
+    error(e)
+  }
+}
+fun <T, T2, T3, T4, T5, T6, T7> Result.complete(arg: T?,
+                            arg2: T2?,
+                            arg3: T3?,
+                            arg4: T4?,
+                            arg5: T5?,
+                            arg6: T6?,
+                            arg7: T7?,
+                            onComplete: (T, T2, T3, T4, T5, T6, T7) -> Unit) {
+  try {
+    onComplete(arg!!, arg2!!, arg3!!, arg4!!, arg5!!, arg6!!, arg7!!)
     success()
   } catch (e: Throwable) {
     error(e)

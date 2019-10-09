@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart';
 
 class Embrace {
   static const MethodChannel _channel =
@@ -23,4 +25,60 @@ class Embrace {
   static Future<void> endAppStartup() async => await _channel.invokeMethod('endAppStartup');
   static Future<void> endSession() async => await _channel.invokeMethod('endSession');
   static Future<void> clearUserIdentifier() async => await _channel.invokeMethod('clearUserIdentifier');
+  static Future<void> logNetworkResponse(Response res, {
+    DateTime startTime,
+    DateTime endTime,
+  }) async =>
+    await logNetworkCall(
+      url: res.request.url.toString(),
+      method: res.request.method,
+      statusCode: res.statusCode,
+      startTime: startTime,
+      endTime: endTime,
+      bytesSent: res.request.contentLength,
+      bytesReceived: res.contentLength,
+    );
+
+  static Future<void> logNetworkCall({
+    @required
+    String url,
+    @required
+    String method,
+    @required
+    int statusCode,
+    DateTime startTime,
+    DateTime endTime,
+    int bytesSent = 0,
+    int bytesReceived = 0,
+  }) async {
+    await _channel.invokeMethod('logNetworkCall', {
+      "url": url,
+      "method": method,
+      "statusCode": statusCode,
+      "startTime": (startTime ?? DateTime.now()).millisecondsSinceEpoch,
+      "endTime": (endTime ?? DateTime.now()).millisecondsSinceEpoch,
+      "bytesSent": bytesSent,
+      "bytesReceived": bytesReceived,
+    });
+  }
+
+  static Future<void> logNetworkError({
+    @required
+    String url,
+    @required
+    String method,
+    DateTime startTime,
+    DateTime endTime,
+    String errorType = "",
+    String errorMessage = "",
+  }) async {
+    await _channel.invokeMethod('logNetworkError', {
+      "url": url,
+      "method": method,
+      "startTime": (startTime ?? DateTime.now()).millisecondsSinceEpoch,
+      "endTime": (endTime ?? DateTime.now()).millisecondsSinceEpoch,
+      "errorType": errorType,
+      "errorMessage": errorMessage,
+    });
+  }
 }
