@@ -1,8 +1,6 @@
-package io.flutter.plugins.embrace
+package io.embrace.android.embracesdk
 
 import android.util.Log
-import io.embrace.android.embracesdk.Embrace
-import io.embrace.android.embracesdk.EmbraceEventService
 import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

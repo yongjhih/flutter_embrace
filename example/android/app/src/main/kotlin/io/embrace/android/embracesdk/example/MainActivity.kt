@@ -1,4 +1,4 @@
-package io.flutter.plugins.embrace.example
+package io.embrace.android.embracesdk.example
 
 import android.os.Bundle
 

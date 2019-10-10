@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.flutter.plugins.embrace.example">
+    package="io.embrace.android.embracesdk.example">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
