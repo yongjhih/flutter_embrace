@@ -6,7 +6,7 @@
 Embrace.initialize(); // will override Http Client for logging
 ```
 
-ref. https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart
+More APIs for flutter: https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart
 
 ## Installation
 
