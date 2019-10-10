@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_embrace/flutter_embrace.dart';
+import 'package:flutter_embrace/uris.dart';
 import 'package:http/http.dart';
 
 void main() => runApp(MyApp());

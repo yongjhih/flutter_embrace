@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'uris.dart';
 
 class Embrace {
   static const MethodChannel _channel =
@@ -113,10 +114,6 @@ class Embrace {
   static Future<void> logWebView(String name) async => await _channel.invokeMethod('logWebView', name);
   static Future<void> forceLogView(String name) async => await _channel.invokeMethod('forceLogView', name);
   static Future<void> stop() async => await _channel.invokeMethod('stop');
-}
-
-class Uris {
-  static String string(Uri uri) => "${uri.toString()}${uri.hasFragment ? "#${uri.fragment}" : ""}";
 }
 
 /// Should not use this after Embrace.initialize() because it has been overridden the global io.HttpClient already
