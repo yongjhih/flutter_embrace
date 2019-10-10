@@ -28,7 +28,7 @@ class Embrace {
   static Future<void> startAppStartup() async => await _channel.invokeMethod('startAppStartup');
   static Future<void> endSession() async => await _channel.invokeMethod('endSession');
   static Future<void> clearUserIdentifier() async => await _channel.invokeMethod('clearUserIdentifier');
-  static Future<void> logNetworkResponse(Response res, {
+  static Future<void> logNetworkResponse(BaseResponse res, {
     DateTime startTime,
     DateTime endTime,
   }) async => await logNetworkCall(
@@ -159,7 +159,11 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<StreamedResponse> send(BaseRequest request) {
-    return client.send(request);
+    final startTime = DateTime.now();
+    return client.send(request).then((response) {
+      Embrace.logNetworkResponse(response, startTime: startTime);
+      return response;
+    });
   }
 
   @override
