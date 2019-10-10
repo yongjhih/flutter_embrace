@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_embrace/flutter_embrace.dart';
+import 'package:http/http.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,26 +14,40 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   bool _isStarted;
+  Client _client;
+  String _body;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    _client = EmbraceHttpClient();
+
+    Future.delayed(Duration.zero, () async {
+      try {
+        _isStarted = await Embrace.isStarted;
+      } catch (err) {
+      }
+      try {
+        final res = await _client.get("https://raw.githubusercontent.com/yongjhih/flutter_embrace/master/README.md");
+        _body = res.body;
+      } catch (err) {
+        _body = "$err";
+      }
+
+      // If the widget was removed from the tree while the asynchronous platform
+      // message was in flight, we want to discard the reply rather than calling
+      // setState to update our non-existent appearance.
+      if (!mounted) return;
+
+      setState(() {
+      });
+    });
   }
 
-  Future<void> initPlatformState() async {
-    try {
-      _isStarted = await Embrace.isStarted;
-    } catch (err) {
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-    });
+  @override
+  void dispose() {
+    _client?.close();
+    super.dispose();
   }
 
   @override
@@ -42,9 +57,14 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
+        body: Column(children: [
+        Center(
           child: Text('isStarted: $_isStarted\n'),
         ),
+          Center(
+            child: Text('$_body'),
+          ),
+        ]),
       ),
     );
   }

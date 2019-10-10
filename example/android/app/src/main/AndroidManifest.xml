@@ -11,9 +11,12 @@
          additional functionality it is fine to subclass or reimplement
          FlutterApplication and put your custom class here. -->
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name=".App"
         android:label="flutter_embrace_example"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="io.embrace.android.embracesdk.api.key"
+            android:value="9e3bc7aed1db41828062c65528f9168e" />
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

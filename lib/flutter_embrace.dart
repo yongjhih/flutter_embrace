@@ -91,7 +91,7 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<Response> delete(dynamic url, {Map<String, String> headers}) {
-    DateTime startTime = DateTime.now();
+    final startTime = DateTime.now();
     return client.delete(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
       return response;
@@ -100,8 +100,7 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<Response> get(dynamic url, {Map<String, String> headers}) {
-
-    DateTime startTime = DateTime.now();
+    final startTime = DateTime.now();
     return client.get(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
       return response;
@@ -110,7 +109,7 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<Response> head(dynamic url, {Map<String, String> headers}) {
-    DateTime startTime = DateTime.now();
+    final startTime = DateTime.now();
     return client.head(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
       return response;
@@ -119,7 +118,7 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<Response> patch(dynamic url, {Map<String, String> headers, dynamic body, Encoding encoding}) {
-    DateTime startTime = DateTime.now();
+    final startTime = DateTime.now();
     return client.patch(url, headers: headers, encoding: encoding).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
       return response;
@@ -128,7 +127,7 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<Response> post(dynamic url, {Map<String, String> headers, dynamic body, Encoding encoding}) {
-    DateTime startTime = DateTime.now();
+    final startTime = DateTime.now();
     return client.post(url, headers: headers, encoding: encoding).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
       return response;
@@ -137,7 +136,7 @@ class EmbraceHttpClient implements Client {
 
   @override
   Future<Response> put(dynamic url, {Map<String, String> headers, dynamic body, Encoding encoding}) {
-    DateTime startTime = DateTime.now();
+    final startTime = DateTime.now();
     return client.put(url, headers: headers, encoding: encoding).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
       return response;
