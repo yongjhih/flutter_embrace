@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 
 class Embrace {
   static const MethodChannel _channel =
@@ -477,7 +476,7 @@ class EmbraceHttpOverrides extends HttpOverrides {
   final String Function(Uri url, Map<String, String> environment)
   findProxyFromEnvironmentFn;
   final HttpClient Function(SecurityContext context) createHttpClientFn;
-  HttpOverrides current;
+  final HttpOverrides current;
 
   EmbraceHttpOverrides({
     this.current,
