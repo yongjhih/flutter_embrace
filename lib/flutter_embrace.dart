@@ -29,22 +29,27 @@ class Embrace {
   static Future<void> startAppStartup() async => await _channel.invokeMethod('startAppStartup');
   static Future<void> endSession() async => await _channel.invokeMethod('endSession');
   static Future<void> clearUserIdentifier() async => await _channel.invokeMethod('clearUserIdentifier');
-  static Future<void> logNetworkIoResponse(HttpClientResponse res, {
-    @required
-    String url,
-    @required
-    String method,
+  static Future<void> logNetworkIoRequest(HttpClientRequest request, {
+    DateTime startTime,
+    DateTime endTime,
+  }) async {
+    startTime ??= DateTime.now();
+    final response = await request.done;
+    return await logNetworkIoRequestResponse(request, response, startTime: startTime, endTime: endTime);
+  }
+
+  static Future<void> logNetworkIoRequestResponse(HttpClientRequest request, HttpClientResponse response, {
     DateTime startTime,
     DateTime endTime,
     int bytesSent = 0,
   }) async => await logNetworkCall(
-    url: url,
-    method: method,
-    statusCode: res.statusCode,
+    url: request.uri.toString(),
+    method: request.method,
+    statusCode: response.statusCode,
     startTime: startTime,
     endTime: endTime,
     bytesSent: bytesSent,
-    bytesReceived: res.contentLength,
+    bytesReceived: response.contentLength,
   );
 
   static Future<void> logNetworkResponse(BaseResponse res, {
@@ -271,28 +276,16 @@ class EmbraceIoHttpClient implements HttpClient {
 
   @override
   Future<HttpClientRequest> delete(String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.delete(host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> deleteUrl(Uri url) {
-    final startTime = DateTime.now();
     return client.deleteUrl(url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
@@ -304,56 +297,32 @@ class EmbraceIoHttpClient implements HttpClient {
 
   @override
   Future<HttpClientRequest> get(String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.get(host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> getUrl(Uri url) {
-    final startTime = DateTime.now();
     return client.getUrl(url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> head(String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.head(host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> headUrl(Uri url) {
-    final startTime = DateTime.now();
     return client.headUrl(url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
@@ -361,112 +330,64 @@ class EmbraceIoHttpClient implements HttpClient {
   @override
   Future<HttpClientRequest> open(
       String method, String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.open(method, host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> openUrl(String method, Uri url) {
-    final startTime = DateTime.now();
     return client.openUrl(method, url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> patch(String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.patch(host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> patchUrl(Uri url) {
-    final startTime = DateTime.now();
     return client.patchUrl(url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> post(String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.post(host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> postUrl(Uri url) {
-    final startTime = DateTime.now();
     return client.postUrl(url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> put(String host, int port, String path) {
-    final startTime = DateTime.now();
     return client.put(host, port, path).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
 
   @override
   Future<HttpClientRequest> putUrl(Uri url) {
-    final startTime = DateTime.now();
     return client.putUrl(url).then((HttpClientRequest request) async {
-      final url = request.uri.toString();
-      final method = request.method;
-      final contentLength = request.contentLength;
-      request.done.then((response) {
-        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
-      });
+      Embrace.logNetworkIoRequest(request);
       return request;
     });
   }
