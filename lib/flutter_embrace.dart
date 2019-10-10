@@ -25,6 +25,7 @@ class Embrace {
   static Future<void> setUserPersona(String value) async => await _channel.invokeMethod('setUserPersona', value);
   static Future<void> clearUserPersona(String value) async => await _channel.invokeMethod('clearUserPersona', value);
   static Future<void> endAppStartup() async => await _channel.invokeMethod('endAppStartup');
+  static Future<void> startAppStartup() async => await _channel.invokeMethod('startAppStartup');
   static Future<void> endSession() async => await _channel.invokeMethod('endSession');
   static Future<void> clearUserIdentifier() async => await _channel.invokeMethod('clearUserIdentifier');
   static Future<void> logNetworkResponse(Response res, {
