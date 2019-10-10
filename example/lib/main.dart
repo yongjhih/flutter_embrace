@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    Embrace.initialize();
+    Embrace.initialize(); // you still need to put Embrace.getInstance().start(Application) in the Application#onCreate() for Android, for monitoring launching
     _client = Client();
 
     Future.delayed(Duration.zero, () async {
@@ -29,7 +29,10 @@ class _MyAppState extends State<MyApp> {
       } catch (err) {
       }
       try {
-        final res = await _client.get("https://raw.githubusercontent.com/yongjhih/flutter_embrace/master/android/build.gradle");
+        final res = await _client.get("https://raw.githubusercontent.com/yongjhih/flutter_embrace/master/android/build.gradle#L1");
+        print("url: ${Uris.string(res.request.url)}");
+        print("url.hasFragment: ${res.request.url.hasFragment}");
+        print("url.fragment: ${res.request.url.fragment}");
         _body = res.body;
       } catch (err) {
         _body = "$err";
@@ -55,18 +58,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Column(children: [
-        Center(
-          child: Text('isStarted: $_isStarted\n'),
-        ),
-          Center(
-            child: Text('$_body'),
+          appBar: AppBar(
+            title: const Text('Plugin example app'),
           ),
-        ]),
-      ),
+          body: SingleChildScrollView(child: Center(
+            child: Column(
+                children: [
+                  Text('isStarted: $_isStarted\n'),
+                  Text('$_body'),
+                ]),
+          ))),
     );
   }
 }

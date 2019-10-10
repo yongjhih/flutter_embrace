@@ -42,7 +42,7 @@ class Embrace {
     DateTime startTime,
     DateTime endTime,
   }) async => await logNetworkCall(
-    url: request.uri.toString(),
+    url: Uris.string(request.uri),
     method: request.method,
     statusCode: response.statusCode,
     startTime: startTime,
@@ -55,7 +55,7 @@ class Embrace {
     DateTime startTime,
     DateTime endTime,
   }) async => await logNetworkCall(
-      url: res.request.url.toString(),
+      url: Uris.string(res.request.url),
       method: res.request.method,
       statusCode: res.statusCode,
       startTime: startTime,
@@ -108,6 +108,10 @@ class Embrace {
       HttpOverrides.global = EmbraceHttpOverrides(current: HttpOverrides.current);
     }
   }
+}
+
+class Uris {
+  static String string(Uri uri) => "${uri.toString()}${uri.hasFragment ? "#${uri.fragment}" : ""}";
 }
 
 /// Should not use this after Embrace.initialize() because it has been overridden the global io.HttpClient already
