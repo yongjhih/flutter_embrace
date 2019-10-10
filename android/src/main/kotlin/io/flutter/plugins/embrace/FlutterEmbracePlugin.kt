@@ -2,6 +2,7 @@ package io.flutter.plugins.embrace
 
 import android.util.Log
 import io.embrace.android.embracesdk.Embrace
+import io.embrace.android.embracesdk.EmbraceEventService
 import io.embrace.android.embracesdk.network.http.HttpMethod
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -111,6 +112,12 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
         "endAppStartup" -> {
           result.complete {
             Embrace.getInstance().endAppStartup()
+          }
+        }
+        // TODO: Embrace.getInstance().startAppStartup(properties)
+        "startAppStartup" -> {
+          result.complete {
+            Embrace.getInstance().startAppStartup()
           }
         }
         "isStarted" -> {
@@ -281,4 +288,8 @@ fun <T, T2, T3, T4, T5, T6, T7> Result.complete(arg: T?,
     Log.e(TAG, e.message, e)
     error(e)
   }
+}
+
+fun Embrace.startAppStartup() {
+  startEvent(EmbraceEventService.STARTUP_EVENT_NAME)
 }
