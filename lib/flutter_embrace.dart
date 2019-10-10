@@ -41,14 +41,13 @@ class Embrace {
   static Future<void> logNetworkIoRequestResponse(HttpClientRequest request, HttpClientResponse response, {
     DateTime startTime,
     DateTime endTime,
-    int bytesSent = 0,
   }) async => await logNetworkCall(
     url: request.uri.toString(),
     method: request.method,
     statusCode: response.statusCode,
     startTime: startTime,
     endTime: endTime,
-    bytesSent: bytesSent,
+    bytesSent: request.contentLength,
     bytesReceived: response.contentLength,
   );
 
