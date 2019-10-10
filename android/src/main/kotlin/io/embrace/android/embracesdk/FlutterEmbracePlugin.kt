@@ -239,9 +239,9 @@ fun Result.complete(onRunnable: () -> Unit) {
   }
 }
 
-fun <R> Result.call(onConsumer: () -> R) {
+fun <R> Result.call(onSuccess: () -> R) {
   try {
-    success(onConsumer())
+    success(onSuccess())
   } catch (e: Throwable) {
     Log.e(TAG, e.message, e)
     error(e)
