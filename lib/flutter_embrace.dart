@@ -108,6 +108,11 @@ class Embrace {
       HttpOverrides.global = EmbraceHttpOverrides(current: HttpOverrides.current);
     }
   }
+
+  static Future<void> logView(String name) async => await _channel.invokeMethod('logView', name);
+  static Future<void> logWebView(String name) async => await _channel.invokeMethod('logWebView', name);
+  static Future<void> forceLogView(String name) async => await _channel.invokeMethod('forceLogView', name);
+  static Future<void> stop() async => await _channel.invokeMethod('stop');
 }
 
 class Uris {

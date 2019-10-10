@@ -178,6 +178,32 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
             )
           }
         }
+        "logView" -> {
+          result.complete(call.argumentsOrNull<String>()) {
+            Embrace.getInstance().logView(it)
+          }
+        }
+        "logWebView" -> {
+          result.complete(call.argumentsOrNull<String>()) {
+            Embrace.getInstance().logWebView(it)
+          }
+        }
+        "forceLogView" -> {
+          result.complete(call.argumentsOrNull<String>()) {
+            Embrace.getInstance().forceLogView(it)
+          }
+        }
+        // TODO
+        // "logTap" -> {
+        //   result.complete(call.argumentsOrNull<String>()) {
+        //     Embrace.getInstance().forceLogView(it)
+        //   }
+        // }
+        "stop" -> {
+          result.complete {
+            Embrace.getInstance().stop()
+          }
+        }
         else -> {
           result.notImplemented()
         }
@@ -288,6 +314,7 @@ fun <T, T2, T3, T4, T5, T6, T7> Result.complete(arg: T?,
   }
 }
 
+// hidden
 fun Embrace.startAppStartup() {
   startEvent(EmbraceEventService.STARTUP_EVENT_NAME)
 }
