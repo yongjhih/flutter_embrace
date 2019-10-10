@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+import 'package:meta/meta.dart';
 
 class Embrace {
   static const MethodChannel _channel =
@@ -28,6 +30,24 @@ class Embrace {
   static Future<void> startAppStartup() async => await _channel.invokeMethod('startAppStartup');
   static Future<void> endSession() async => await _channel.invokeMethod('endSession');
   static Future<void> clearUserIdentifier() async => await _channel.invokeMethod('clearUserIdentifier');
+  static Future<void> logNetworkIoResponse(HttpClientResponse res, {
+    @required
+    String url,
+    @required
+    String method,
+    DateTime startTime,
+    DateTime endTime,
+    int bytesSent = 0,
+  }) async => await logNetworkCall(
+    url: url,
+    method: method,
+    statusCode: res.statusCode,
+    startTime: startTime,
+    endTime: endTime,
+    bytesSent: bytesSent,
+    bytesReceived: res.contentLength,
+  );
+
   static Future<void> logNetworkResponse(BaseResponse res, {
     DateTime startTime,
     DateTime endTime,
@@ -79,15 +99,20 @@ class Embrace {
       "errorType": errorType,
       "errorMessage": errorMessage,
     });
+
+  static void initialize() {
+    if (Platform.isAndroid) {
+      HttpOverrides.global = EmbraceHttpOverrides(current: HttpOverrides.current);
+    }
+  }
 }
 
+/// Should not use this after Embrace.initialize() because it has been overridden the global io.HttpClient already
 class EmbraceHttpClient implements Client {
 
-  Client client;
+  final Client client;
 
-  EmbraceHttpClient({this.client}) : super() {
-    client ??= Client();
-  }
+  EmbraceHttpClient({Client client}) : client = client ?? Client();
 
   @override
   Future<Response> delete(dynamic url, {Map<String, String> headers}) {
@@ -169,5 +194,310 @@ class EmbraceHttpClient implements Client {
   @override
   void close() {
     client.close();
+  }
+}
+
+/// Used to use with EmbraceHttpOverrides
+class EmbraceIoHttpClient implements HttpClient {
+
+  final HttpClient client;
+
+  EmbraceIoHttpClient({HttpClient client}) : client = client ?? HttpClient();
+
+  @override
+  set autoUncompress(bool au) => client.autoUncompress = au;
+
+  @override
+  set connectionTimeout(Duration ct) => client.connectionTimeout = ct;
+
+  @override
+  set idleTimeout(Duration it) => client.idleTimeout = it;
+
+  @override
+  set maxConnectionsPerHost(int mcph) => client.maxConnectionsPerHost = mcph;
+
+  @override
+  set userAgent (String ua) => client.userAgent = ua;
+
+  @override
+  bool get autoUncompress => client.autoUncompress;
+
+  @override
+  Duration get connectionTimeout => client.connectionTimeout;
+
+  @override
+  Duration get idleTimeout => client.idleTimeout;
+
+  @override
+  int get maxConnectionsPerHost => client.maxConnectionsPerHost;
+
+  @override
+  String get userAgent => client.userAgent;
+
+  @override
+  void addCredentials(
+      Uri url, String realm, HttpClientCredentials credentials) {
+    client.addCredentials(url, realm, credentials);
+  }
+
+  @override
+  void addProxyCredentials(
+      String host, int port, String realm, HttpClientCredentials credentials) {
+    client.addProxyCredentials(host, port, realm, credentials);
+  }
+
+  @override
+  set authenticate(
+      Future<bool> Function(Uri url, String scheme, String realm) f) {
+    client.authenticate = f;
+  }
+
+  @override
+  set authenticateProxy(
+      Future<bool> Function(String host, int port, String scheme, String realm)
+      f) {
+    client.authenticateProxy = f;
+  }
+
+  @override
+  set badCertificateCallback(
+      bool Function(X509Certificate cert, String host, int port) callback) {
+    client.badCertificateCallback = callback;
+  }
+
+  @override
+  void close({bool force = false}) {
+    client.close(force: force);
+  }
+
+  @override
+  Future<HttpClientRequest> delete(String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.delete(host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> deleteUrl(Uri url) {
+    final startTime = DateTime.now();
+    return client.deleteUrl(url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  set findProxy(String Function(Uri url) f) {
+    client.findProxy = f;
+  }
+
+  @override
+  Future<HttpClientRequest> get(String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.get(host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> getUrl(Uri url) {
+    final startTime = DateTime.now();
+    return client.getUrl(url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> head(String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.head(host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> headUrl(Uri url) {
+    final startTime = DateTime.now();
+    return client.headUrl(url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> open(
+      String method, String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.open(method, host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> openUrl(String method, Uri url) {
+    final startTime = DateTime.now();
+    return client.openUrl(method, url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> patch(String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.patch(host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> patchUrl(Uri url) {
+    final startTime = DateTime.now();
+    return client.patchUrl(url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> post(String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.post(host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> postUrl(Uri url) {
+    final startTime = DateTime.now();
+    return client.postUrl(url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> put(String host, int port, String path) {
+    final startTime = DateTime.now();
+    return client.put(host, port, path).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+
+  @override
+  Future<HttpClientRequest> putUrl(Uri url) {
+    final startTime = DateTime.now();
+    return client.putUrl(url).then((HttpClientRequest request) async {
+      final url = request.uri.toString();
+      final method = request.method;
+      final contentLength = request.contentLength;
+      request.done.then((response) {
+        Embrace.logNetworkIoResponse(response, startTime: startTime, url: url, method: method, bytesSent: contentLength);
+      });
+      return request;
+    });
+  }
+}
+
+class EmbraceHttpOverrides extends HttpOverrides {
+  final String Function(Uri url, Map<String, String> environment)
+  findProxyFromEnvironmentFn;
+  final HttpClient Function(SecurityContext context) createHttpClientFn;
+  HttpOverrides current;
+
+  EmbraceHttpOverrides({
+    this.current,
+    this.findProxyFromEnvironmentFn,
+    this.createHttpClientFn,
+  });
+
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    final client = createHttpClientFn != null
+        ? createHttpClientFn(context)
+        : current?.createHttpClient(context) ?? super.createHttpClient(context);
+
+    return Platform.isAndroid ? EmbraceIoHttpClient(client: client): client;
+  }
+
+  @override
+  String findProxyFromEnvironment(Uri url, Map<String, String> environment) {
+    return findProxyFromEnvironmentFn != null
+        ? findProxyFromEnvironmentFn(url, environment)
+        : super.findProxyFromEnvironment(url, environment);
   }
 }

@@ -20,7 +20,8 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _client = EmbraceHttpClient();
+    Embrace.initialize();
+    _client = Client();
 
     Future.delayed(Duration.zero, () async {
       try {
@@ -28,7 +29,7 @@ class _MyAppState extends State<MyApp> {
       } catch (err) {
       }
       try {
-        final res = await _client.get("https://raw.githubusercontent.com/yongjhih/flutter_embrace/master/README.md");
+        final res = await _client.get("https://raw.githubusercontent.com/yongjhih/flutter_embrace/master/android/build.gradle");
         _body = res.body;
       } catch (err) {
         _body = "$err";
