@@ -4,7 +4,15 @@ import 'dart:async';
 import 'package:flutter_embrace/flutter_embrace.dart';
 import 'package:http/http.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  // you still need to put Embrace.getInstance().start(Application) in the Application#onCreate() for Android, for monitoring launching
+  Embrace.initialize();
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    Embrace.crashFlutter(details);
+    return ErrorWidget(details.exception);
+  };
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -13,19 +21,13 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   @override
-  void initState() {
-    super.initState();
-    // you still need to put Embrace.getInstance().start(Application) in the Application#onCreate() for Android, for monitoring launching
-    Embrace.initialize();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorObservers: [EmbraceRouteObserver()],
       routes: <String, WidgetBuilder> {
         '/screen2': (BuildContext context) => Screen2(),
         '/screen3': (BuildContext context) => Screen3(),
+        '/crash': (BuildContext context) => CrashScreen(),
       },
       home: HomeScreen(),
     );
@@ -54,7 +56,7 @@ class _HomeScreen extends State<HomeScreen> {
       }
       try {
         final res = await _client.get("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L1");
-        print("url: ${Uris.string(res.request.url)}");
+        print("url: ${res.request.url}");
         print("url.hasFragment: ${res.request.url.hasFragment}");
         print("url.fragment: ${res.request.url.fragment}");
         _body = res.body;
@@ -97,10 +99,27 @@ class _HomeScreen extends State<HomeScreen> {
                     Navigator.of(context).pushNamed('/screen3');
                   },
                 ),
+                FlatButton(child: Text('Crash'),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/crash');
+                  },
+                ),
+                FlatButton(child: Text('Crash in background'),
+                  onPressed: () {
+                    Embrace.crashError(StateError("error"));
+                  },
+                ),
                 Text('isStarted: $_isStarted\n'),
                 Text('$_body'),
               ]),
         )));
+  }
+}
+
+class CrashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return null;
   }
 }
 
@@ -121,7 +140,7 @@ class _Screen2 extends State<Screen2> {
     Future.delayed(Duration.zero, () async {
       try {
         final res = await _client.get("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L2");
-        print("url: ${Uris.string(res.request.url)}");
+        print("url: ${res.request.url}");
         print("url.hasFragment: ${res.request.url.hasFragment}");
         print("url.fragment: ${res.request.url.fragment}");
         _body = res.body;
@@ -183,7 +202,7 @@ class _Screen3 extends State<Screen3> {
     Future.delayed(Duration.zero, () async {
       try {
         final res = await _client.get("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L3");
-        print("url: ${Uris.string(res.request.url)}");
+        print("url: ${res.request.url}");
         print("url.hasFragment: ${res.request.url.hasFragment}");
         print("url.fragment: ${res.request.url.fragment}");
         _body = res.body;

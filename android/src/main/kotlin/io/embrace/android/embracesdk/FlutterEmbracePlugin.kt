@@ -207,7 +207,7 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
         "crash" -> {
           result.complete(
                   call.argumentOrNull<String>("exception"),
-                  call.argumentOrNull<List<Map<String, String>>>("stackTraceElements")
+                  call.argumentOrNull<List<Map<String, String>>>("stackTraceElements") ?: emptyList()
           ) { message, stackTraceElementMaps ->
             Thread {
               throw Exception(message).apply {
