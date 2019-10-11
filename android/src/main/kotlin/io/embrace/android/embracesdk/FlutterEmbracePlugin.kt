@@ -204,10 +204,36 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
             Embrace.getInstance().stop()
           }
         }
+        "crash" -> {
+          result.complete(
+                  call.argumentOrNull<String>("exception"),
+                  call.argumentOrNull<List<Map<String, String>>>("stackTraceElements")
+          ) { message, stackTraceElementMaps ->
+            Thread {
+              throw Exception(message).apply {
+                stackTrace = stackTraceElementMaps.mapNotNull { stackTraceElement(it) }.toTypedArray()
+              }
+            }.run()
+          }
+        }
         else -> {
           result.notImplemented()
         }
       }
+  }
+}
+
+fun stackTraceElement(errorElement: Map<String, String>): StackTraceElement? {
+  return try {
+    val fileName = errorElement["file"]
+    val lineNumber = errorElement["line"]
+    val className = errorElement["class"]
+    val methodName = errorElement["method"]
+
+    StackTraceElement(className ?: "", methodName, fileName, Integer.parseInt(lineNumber ?: "0"))
+  } catch (e: Exception) {
+    Log.e(FlutterEmbracePlugin::class.java.simpleName, "Unable to generate stack trace element from Dart side error.")
+    null
   }
 }
 
