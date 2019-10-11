@@ -140,20 +140,20 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
             call.argumentOrNull<String>("url"),
             call.argumentOrNull<String>("method"),
             call.argumentOrNull<Int>("statusCode"),
-            call.argumentOrNull<Long>("startTime"),
-            call.argumentOrNull<Long>("endTime"),
-            call.argumentOrNull<Long>("bytesSent"),
-            call.argumentOrNull<Long>("bytesReceived")
+            call.argumentOrNull<Number>("startTime"),
+            call.argumentOrNull<Number>("endTime"),
+            call.argumentOrNull<Number>("bytesSent") ?: -1L,
+            call.argumentOrNull<Number>("bytesReceived") ?: -1L
           ) { url, method, statusCode, startTime, endTime, bytesSent, bytesReceived ->
             Log.d(TAG, "logNetworkCall: $method $url $statusCode")
             Embrace.getInstance().logNetworkCall(
                     url,
                     HttpMethod.fromString(method),
                     statusCode,
-                    startTime,
-                    endTime,
-                    bytesSent,
-                    bytesReceived
+                    startTime.toLong(),
+                    endTime.toLong(),
+                    bytesSent.toLong(),
+                    bytesReceived.toLong()
             )
           }
         }
@@ -162,8 +162,8 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
           result.complete(
                   call.argumentOrNull<String>("url"),
                   call.argumentOrNull<String>("method"),
-                  call.argumentOrNull<Long>("startTime"),
-                  call.argumentOrNull<Long>("endTime"),
+                  call.argumentOrNull<Number>("startTime"),
+                  call.argumentOrNull<Number>("endTime"),
                   call.argumentOrNull<String>("errorType"),
                   call.argumentOrNull<String>("errorMessage")
           ) { url, method, startTime, endTime, errorType, errorMessage ->
@@ -171,8 +171,8 @@ class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler 
             Embrace.getInstance().logNetworkClientError(
                     url,
                     HttpMethod.fromString(method),
-                    startTime,
-                    endTime,
+                    startTime.toLong(),
+                    endTime.toLong(),
                     errorType,
                     errorMessage
             )

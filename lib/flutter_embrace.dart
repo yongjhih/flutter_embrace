@@ -83,8 +83,8 @@ class Embrace {
       "statusCode": statusCode,
       "startTime": (startTime ?? DateTime.now()).millisecondsSinceEpoch,
       "endTime": (endTime ?? DateTime.now()).millisecondsSinceEpoch,
-      "bytesSent": bytesSent,
-      "bytesReceived": bytesReceived,
+      "bytesSent": bytesSent ?? 0,
+      "bytesReceived": bytesReceived ?? 0,
     });
 
   static Future<void> logNetworkError({
