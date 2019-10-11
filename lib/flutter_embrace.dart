@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
-import 'uris.dart';
 
 class Embrace {
   static const MethodChannel _channel =
@@ -44,7 +43,7 @@ class Embrace {
     DateTime startTime,
     DateTime endTime,
   }) async => await logNetworkCall(
-    url: Uris.string(request.uri),
+    url: request.uri.toString(),
     method: request.method,
     statusCode: response.statusCode,
     startTime: startTime,
@@ -57,7 +56,7 @@ class Embrace {
     DateTime startTime,
     DateTime endTime,
   }) async => await logNetworkCall(
-      url: Uris.string(res.request.url),
+      url: res.request.url.toString(),
       method: res.request.method,
       statusCode: res.statusCode,
       startTime: startTime,
