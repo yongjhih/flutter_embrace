@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'uris.dart';
@@ -425,4 +426,46 @@ class EmbraceHttpOverrides extends HttpOverrides {
         ? findProxyFromEnvironmentFn(url, environment)
         : super.findProxyFromEnvironment(url, environment);
   }
+}
+
+typedef OnPage<T> = void Function(PageRoute<T> value);
+
+class SimpleRouteObserver<T> extends RouteObserver<PageRoute<T>> {
+  final OnPage<T> onPage;
+  SimpleRouteObserver({OnPage<T> onPage}) : onPage = onPage ?? emptyOnPage;
+
+  static void emptyOnPage<T>(PageRoute<T> page) {
+    print("emptyOnPage: ${page.settings.name}");
+  }
+
+  @override
+  void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
+    super.didPush(route, previousRoute);
+    if (route is PageRoute) {
+      onPage(route);
+    }
+  }
+
+  @override
+  void didReplace({Route<dynamic> newRoute, Route<dynamic> oldRoute}) {
+    super.didReplace(newRoute: newRoute, oldRoute: oldRoute);
+    if (newRoute is PageRoute) {
+      onPage(newRoute);
+    }
+  }
+
+  @override
+  void didPop(Route<dynamic> route, Route<dynamic> previousRoute) {
+    super.didPop(route, previousRoute);
+    if (previousRoute is PageRoute && route is PageRoute) {
+      onPage(previousRoute);
+    }
+  }
+}
+
+//
+class EmbraceRouteObserver extends SimpleRouteObserver<dynamic> {
+  EmbraceRouteObserver() : super(onPage: (page) {
+    Embrace.logView(page.settings.name);
+  });
 }
