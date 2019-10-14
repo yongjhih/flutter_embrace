@@ -13,6 +13,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
+  instabug_flutter:
+    git:
+      url: https://github.com/yongjhih/Instabug-Flutter.git
+      ref: 6e03d8ba4572b86de0cd8a7901957732c391aa88
 
 dev_dependencies:
   flutter_test:

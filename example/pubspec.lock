@@ -67,6 +67,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.3"
+  instabug_flutter:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "6e03d8ba4572b86de0cd8a7901957732c391aa88"
+      resolved-ref: "6e03d8ba4572b86de0cd8a7901957732c391aa88"
+      url: "https://github.com/yongjhih/Instabug-Flutter.git"
+    source: git
+    version: "8.6.4"
   matcher:
     dependency: transitive
     description:

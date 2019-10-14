@@ -6,11 +6,11 @@ import 'package:http/http.dart';
 
 void main() {
   // you still need to put Embrace.getInstance().start(Application) in the Application#onCreate() for Android, for monitoring launching
-  Embrace.initialize();
-  ErrorWidget.builder = (FlutterErrorDetails details) {
-    Embrace.crashFlutter(details);
-    return ErrorWidget(details.exception);
-  };
+  //Embrace.initialize();
+  //ErrorWidget.builder = (FlutterErrorDetails details) {
+  //  Embrace.crashFlutter(details);
+  //  return ErrorWidget(details.exception);
+  //};
   runApp(MyApp());
 }
 

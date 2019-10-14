@@ -44,6 +44,10 @@ android {
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+        ndk {
+            abiFilters 'armeabi-v7a', 'x86', 'x86_64'
+        }
     }
 
     buildTypes {
@@ -61,6 +65,7 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "androidx.multidex:multidex:2.0.1"
     implementation "embrace-io:embrace-android-sdk:3.4.0"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
