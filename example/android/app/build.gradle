@@ -24,6 +24,7 @@ if (flutterVersionName == null) {
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+apply from: 'git-version.gradle'
 
 android {
     compileSdkVersion 28
@@ -41,8 +42,10 @@ android {
         applicationId "io.embrace.android.embracesdk.example"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        //versionCode flutterVersionCode.toInteger()
+        //versionName flutterVersionName
+        versionName gitVersionName
+        versionCode gitVersionCode
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
