@@ -48,15 +48,6 @@ packages:
       relative: true
     source: path
     version: "0.0.8"
-  flutter_stetho:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "16a4ecfa59b68118659ba5947c74c4769fbaf0e4"
-      resolved-ref: "16a4ecfa59b68118659ba5947c74c4769fbaf0e4"
-      url: "https://github.com/yongjhih/flutter_stetho.git"
-    source: git
-    version: "0.2.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter

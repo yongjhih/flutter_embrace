@@ -17,10 +17,10 @@ dependencies:
     git:
       url: https://github.com/yongjhih/Instabug-Flutter.git
       ref: 6e03d8ba4572b86de0cd8a7901957732c391aa88
-  flutter_stetho:
-    git:
-      url: https://github.com/yongjhih/flutter_stetho.git
-      ref: 16a4ecfa59b68118659ba5947c74c4769fbaf0e4
+  #flutter_stetho:
+  #  git:
+  #    url: https://github.com/yongjhih/flutter_stetho.git
+  #    ref: 16a4ecfa59b68118659ba5947c74c4769fbaf0e4
 
 dev_dependencies:
   flutter_test:
