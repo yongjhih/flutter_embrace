@@ -13,6 +13,7 @@ class App : io.flutter.app.FlutterApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        Embrace.getInstance().start(this)
         InstabugFlutterPlugin().start(this,
                 "5f22ae9a98bd5e8e8e35cde6d0f8bb83",
                 arrayListOf(
@@ -22,6 +23,5 @@ class App : io.flutter.app.FlutterApplication() {
                         //InstabugFlutterPlugin.INVOCATION_EVENT_FLOATING_BUTTON,
                         InstabugFlutterPlugin.INVOCATION_EVENT_SHAKE
                 ));
-        //Embrace.getInstance().start(this)
     }
 }
