@@ -13,7 +13,7 @@ class App : io.flutter.app.FlutterApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        Embrace.getInstance().start(this)
+        //Embrace.getInstance().start(this)
         InstabugFlutterPlugin().start(this,
                 "5f22ae9a98bd5e8e8e35cde6d0f8bb83",
                 arrayListOf(
