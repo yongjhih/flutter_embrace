@@ -6,7 +6,7 @@ import 'package:flutter_stetho/flutter_stetho.dart';
 import 'package:http/http.dart';
 
 void main() {
-  //Stetho.initialize(); // may break instabug sending
+  Stetho.initialize(); // may break instabug sending
   // you still need to put Embrace.getInstance().start(Application) in the Application#onCreate() for Android, for monitoring launching
   Embrace.initialize();
   //ErrorWidget.builder = (FlutterErrorDetails details) {
