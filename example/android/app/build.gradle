@@ -45,7 +45,7 @@ android {
         //versionCode flutterVersionCode.toInteger()
         //versionName flutterVersionName
         versionName gitVersionName
-        versionCode gitVersionCode
+        versionCode 0
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {

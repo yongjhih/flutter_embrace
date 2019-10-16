@@ -1,8 +1,7 @@
 ext {
     gitDescribeCmd = 'git describe --tags --always --dirty'
     gitRevCountCmd = 'git rev-list HEAD --count'
-    gitVersionName = gitDescribeCmd.execute().text.trim().replaceAll('-g[a-z0-9]{7}', '').replaceFirst('-', '.')
-    gitVersionCode = 2004000 + gitRevCountCmd.execute().text.trim().toInteger()
+    gitVersionName = gitDescribeCmd.execute().text.trim()
 }
 
 task printVersion() << {
