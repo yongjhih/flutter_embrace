@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:flutter_embrace/flutter_embrace.dart';
-//import 'package:flutter_stetho/flutter_stetho.dart';
+import 'package:flutter_stetho/flutter_stetho.dart';
 import 'package:http/http.dart';
 
 void main() {
