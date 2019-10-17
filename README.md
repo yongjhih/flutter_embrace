@@ -12,6 +12,8 @@ MaterialApp(
 
 More APIs for flutter: https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart
 
+EmbraceLogTree for Fimber: https://gist.github.com/yongjhih/9a203147eda126a407e2ed6cb841cae3
+
 ## Installation
 
 pubspec.yaml
@@ -21,4 +23,33 @@ dependencies:
   flutter_embrace:
     git:
       url: https://github.com/yongjhih/flutter_embrace.git
+```
+
+App.kt
+
+```kt
+class App : io.flutter.app.FlutterApplication() {
+    override fun onCreate() {
+        super.onCreate()
+        Embrace.getInstance().start(this)
+    }
+}
+```
+
+AndroidManifest.xml
+
+```xml
+<manifest>
+    <application
+        android:name=".App">
+    </application>
+</manifest>
+```
+
+build.gradle
+
+```gradle
+dependencies {
+    implementation "embrace-io:embrace-android-sdk:3.4.0"
+}
 ```
