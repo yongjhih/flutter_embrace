@@ -216,15 +216,15 @@ void main() {
     final mockResponse = MockHttpClientResponse();
     when<dynamic>(mockRequest.done)
         .thenAnswer((_) async => mockResponse);
-    when<dynamic>(mockRequest.uri)
+    when<Uri>(mockRequest.uri)
         .thenAnswer((_) => Uri.parse("https://example.com/"));
-    when<dynamic>(mockRequest.method)
+    when<String>(mockRequest.method)
         .thenAnswer((_) => "GET");
-    when<dynamic>(mockRequest.contentLength)
+    when<int>(mockRequest.contentLength)
         .thenAnswer((_) => 0);
-    when<dynamic>(mockResponse.statusCode)
+    when<int>(mockResponse.statusCode)
         .thenAnswer((_) => 200);
-    when<dynamic>(mockResponse.contentLength)
+    when<int>(mockResponse.contentLength)
         .thenAnswer((_) => 0);
     await Embrace.logNetworkIoRequest(
       mockRequest,
@@ -252,15 +252,15 @@ void main() {
     final mockResponse = MockHttpClientResponse();
     when<dynamic>(mockRequest.done)
         .thenAnswer((_) async => mockResponse);
-    when<dynamic>(mockRequest.uri)
+    when<Uri>(mockRequest.uri)
         .thenAnswer((_) => Uri.parse("https://example.com/"));
-    when<dynamic>(mockRequest.method)
+    when<String>(mockRequest.method)
         .thenAnswer((_) => "GET");
-    when<dynamic>(mockRequest.contentLength)
+    when<int>(mockRequest.contentLength)
         .thenAnswer((_) => 0);
-    when<dynamic>(mockResponse.statusCode)
+    when<int>(mockResponse.statusCode)
         .thenAnswer((_) => 200);
-    when<dynamic>(mockResponse.contentLength)
+    when<int>(mockResponse.contentLength)
         .thenAnswer((_) => 0);
     await Embrace.logNetworkIoRequestResponse(
       mockRequest,
@@ -289,15 +289,15 @@ void main() {
     final mockResponse = MockBaseResponse();
     when<dynamic>(mockResponse.request)
         .thenAnswer((_) => mockRequest);
-    when<dynamic>(mockRequest.url)
+    when<Uri>(mockRequest.url)
         .thenAnswer((_) => Uri.parse("https://example.com/"));
-    when<dynamic>(mockRequest.method)
+    when<String>(mockRequest.method)
         .thenAnswer((_) => "GET");
-    when<dynamic>(mockRequest.contentLength)
+    when<int>(mockRequest.contentLength)
         .thenAnswer((_) => 0);
-    when<dynamic>(mockResponse.statusCode)
+    when<int>(mockResponse.statusCode)
         .thenAnswer((_) => 200);
-    when<dynamic>(mockResponse.contentLength)
+    when<int>(mockResponse.contentLength)
         .thenAnswer((_) => 0);
     await Embrace.logNetworkResponse(
       mockResponse,
@@ -504,11 +504,9 @@ class MockHttpClient extends Mock implements HttpClient {}
 T as<T>(dynamic it) => it is T ? it : null;
 
 class SimpleHttpOverrides extends HttpOverrides {
-  final HttpClient client;
   SimpleHttpOverrides(this.client);
+  final HttpClient client;
 
   @override
-  HttpClient createHttpClient(SecurityContext context) {
-    return client;
-  }
+  HttpClient createHttpClient(SecurityContext context) => client;
 }
