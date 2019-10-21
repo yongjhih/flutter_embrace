@@ -466,16 +466,16 @@ void main() {
     when<int>(mockResponse.contentLength)
         .thenAnswer((_) => 0);
     HttpOverrides.global = SimpleHttpOverrides(mockClient);
-    when<dynamic>(mockClient.get("example.com", 80, "/#EmbraceIoHttpClient"))
+    when<dynamic>(mockClient.get("example.com", 443, "/#EmbraceIoHttpClient"))
         .thenAnswer((_) async => mockRequest);
 
     final client = EmbraceIoHttpClient();
-    await client.get("example.com", 80, "/#EmbraceIoHttpClient");
+    await client.get("example.com", 443, "/#EmbraceIoHttpClient");
     final call = calls
         .where((it) => it.method == "logNetworkCall")
         .firstWhere((it) {
       final args = as<Map<dynamic, dynamic>>(it.arguments);
-      return args['url'] == "http://example.com/#EmbraceIoHttpClient";
+      return args['url'] == "https://example.com/#EmbraceIoHttpClient";
     });
     final args = as<Map<dynamic, dynamic>>(call.arguments);
     expect(args['method'], "GET");
