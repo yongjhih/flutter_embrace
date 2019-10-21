@@ -53,3 +53,10 @@ dependencies {
     implementation "embrace-io:embrace-android-sdk:3.4.0"
 }
 ```
+
+## Test / Code Coverage
+
+```sh
+./coverage.sh && ./coverage.sh && ./coverage.sh --report
+```
+

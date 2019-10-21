@@ -14,6 +14,9 @@ class Embrace {
   static const MethodChannel _channel =
       const MethodChannel('flutter_embrace');
 
+  @visibleForTesting
+  static const MethodChannel channel = _channel;
+
   static Future<bool> get isStarted async => await _channel.invokeMethod('isStarted');
   static Future<void> start({bool enableIntegrationTesting}) async => await _channel.invokeMethod('start', enableIntegrationTesting);
   static Future<void> setUserIdentifier(String id) async => await _channel.invokeMethod('setUserIdentifier', id);

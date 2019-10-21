@@ -80,6 +80,10 @@ void main() {
     channel.setMockMethodCallHandler(null);
   });
 
+  test('channel', () async {
+    expect(Embrace.channel.name, 'flutter_embrace');
+  });
+
   test('isStarted', () async {
     expect(await Embrace.isStarted, false);
     expect(
@@ -160,10 +164,10 @@ void main() {
     );
   });
   test('clearAllUserPersonas', () async {
-    await Embrace.setUsername("");
+    await Embrace.clearAllUserPersonas();
     expect(
       calls,
-      <Matcher>[isMethodCall('setUsername', arguments: "")],
+      <Matcher>[isMethodCall('clearAllUserPersonas', arguments: null)],
     );
   });
   test('setUserPersona', () async {
@@ -433,30 +437,41 @@ void main() {
     routeObs.didReplace(newRoute: mockPageRoute);
     expect(onPageCalled, 3);
   });
-  test('EmbraceHttpClient', () async {
+
+  test('EmbraceHttpClient.get()', () async {
     final mockClient = MockClient((req) async {
       return Response(json.encode({}), 200);
     });
     final client = EmbraceHttpClient(client: mockClient);
-    await client.get("http://example.com/#EmbraceHttpClient");
+    await client.get("https://example.com/#EmbraceHttpClient.get()");
+    await client.put("https://example.com/#EmbraceHttpClient.put()");
+    await client.post("https://example.com/#EmbraceHttpClient.post()");
+    await client.patch("https://example.com/#EmbraceHttpClient.patch()");
+    await client.delete("https://example.com/#EmbraceHttpClient.delete()");
+    await client.head("https://example.com/#EmbraceHttpClient.head()");
+    await client.send(Request("GET", Uri.parse("https://example.com/#EmbraceHttpClient.get()")));
+    await client.read("https://example.com/#EmbraceHttpClient.read()");
+    await client.readBytes("https://example.com/#EmbraceHttpClient.readBytes()");
     final call = calls
         .where((it) => it.method == "logNetworkCall")
         .firstWhere((it) {
           final args = as<Map<dynamic, dynamic>>(it.arguments);
-          return args['url'] == "http://example.com/#EmbraceHttpClient";
+          return args['url'] == "https://example.com/#EmbraceHttpClient.get()";
         });
     final args = as<Map<dynamic, dynamic>>(call.arguments);
     expect(args['method'], "GET");
     expect(args['statusCode'], 200);
+    client.close();
   });
-  test('EmbraceIoHttpClient', () async {
+
+  test('EmbraceIoHttpClient.get()', () async {
     final mockClient = MockHttpClient();
     final mockRequest = MockHttpClientRequest();
     final mockResponse = MockHttpClientResponse();
     when<dynamic>(mockRequest.done)
         .thenAnswer((_) async => mockResponse);
     when<Uri>(mockRequest.uri)
-        .thenAnswer((_) => Uri.parse("https://example.com/#EmbraceIoHttpClient"));
+        .thenAnswer((_) => Uri.parse("https://example.com/#EmbraceIoHttpClient.get()"));
     when<String>(mockRequest.method)
         .thenAnswer((_) => "GET");
     when<int>(mockRequest.contentLength)
@@ -466,28 +481,93 @@ void main() {
     when<int>(mockResponse.contentLength)
         .thenAnswer((_) => 0);
     HttpOverrides.global = SimpleHttpOverrides(mockClient);
-    when<dynamic>(mockClient.get("example.com", 443, "/#EmbraceIoHttpClient"))
+    when<dynamic>(mockClient.get("example.com", 443, "/#EmbraceIoHttpClient.get()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.getUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.getUrl()")))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.put("example.com", 443, "/#EmbraceIoHttpClient.put()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.putUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.putUrl()")))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.delete("example.com", 443, "/#EmbraceIoHttpClient.delete()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.deleteUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.deleteUrl()")))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.patch("example.com", 443, "/#EmbraceIoHttpClient.patch()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.patchUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.patchUrl()")))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.post("example.com", 443, "/#EmbraceIoHttpClient.post()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.postUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.postUrl()")))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.head("example.com", 443, "/#EmbraceIoHttpClient.head()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.headUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.headUrl()")))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.open("GET", "example.com", 443, "/#EmbraceIoHttpClient.open()"))
+        .thenAnswer((_) async => mockRequest);
+    when<dynamic>(mockClient.openUrl("GET", Uri.parse("https://example.com/#EmbraceIoHttpClient.openUrl()")))
         .thenAnswer((_) async => mockRequest);
 
     final client = EmbraceIoHttpClient();
-    await client.get("example.com", 443, "/#EmbraceIoHttpClient");
+    await client.get("example.com", 443, "/#EmbraceIoHttpClient.get()");
+    await client.getUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.getUrl()"));
+    await client.put("example.com", 443, "/#EmbraceIoHttpClient.put()");
+    await client.putUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.putUrl()"));
+    await client.delete("example.com", 443, "/#EmbraceIoHttpClient.delete()");
+    await client.deleteUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.deleteUrl()"));
+    await client.patch("example.com", 443, "/#EmbraceIoHttpClient.patch()");
+    await client.patchUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.patchUrl()"));
+    await client.post("example.com", 443, "/#EmbraceIoHttpClient.post()");
+    await client.postUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.postUrl()"));
+    await client.head("example.com", 443, "/#EmbraceIoHttpClient.head()");
+    await client.headUrl(Uri.parse("https://example.com/#EmbraceIoHttpClient.headUrl()"));
+    await client.open("GET", "example.com", 443, "/#EmbraceIoHttpClient.open()");
+    await client.openUrl("GET", Uri.parse("https://example.com/#EmbraceIoHttpClient.openUrl()"));
     final call = calls
         .where((it) => it.method == "logNetworkCall")
         .firstWhere((it) {
       final args = as<Map<dynamic, dynamic>>(it.arguments);
-      return args['url'] == "https://example.com/#EmbraceIoHttpClient";
+      return args['url'] == "https://example.com/#EmbraceIoHttpClient.get()";
     });
+
+    client.autoUncompress = client.autoUncompress;
+    client.connectionTimeout = client.connectionTimeout;
+    client.idleTimeout = client.idleTimeout;
+    client.maxConnectionsPerHost = client.maxConnectionsPerHost;
+    client.userAgent = client.userAgent;
+    client.autoUncompress = client.autoUncompress;
+    client.connectionTimeout = client.connectionTimeout;
+    client.idleTimeout = client.idleTimeout;
+    client.maxConnectionsPerHost = client.maxConnectionsPerHost;
+    client.findProxy = (_) => null;
     final args = as<Map<dynamic, dynamic>>(call.arguments);
     expect(args['method'], "GET");
     expect(args['statusCode'], 200);
 
     mockRequest.close();
+    client.close();
   });
   test('EmbraceHttpOverrides', () async {
     final httpOverrides = EmbraceHttpOverrides();
     expect(httpOverrides.createHttpClient(SecurityContext()).runtimeType, EmbraceIoHttpClient);
-    final httpOverrides2 = EmbraceHttpOverrides(createHttpClientFn: (context) => HttpClient());
+    final httpOverrides2 = EmbraceHttpOverrides(createHttpClientFn: (context) => HttpClient(), findProxyFromEnvironmentFn: (uri, env) => "");
     expect(httpOverrides2.createHttpClient(SecurityContext()).runtimeType, EmbraceIoHttpClient);
+    expect(httpOverrides2.findProxyFromEnvironment(null, null), "");
+  });
+
+  test('EmbraceRouteObserver', () async {
+    final embraceRouteObserver = EmbraceRouteObserver();
+    final mockPageRoute = MockPageRoute();
+
+    when<dynamic>(mockPageRoute.settings)
+        .thenAnswer((_) => RouteSettings(name: "/"));
+    embraceRouteObserver.didPush(mockPageRoute, mockPageRoute);
+    expect(
+      calls,
+      <Matcher>[isMethodCall('logView', arguments: "/")],
+    );
   });
 }
 

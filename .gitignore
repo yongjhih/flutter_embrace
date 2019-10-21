@@ -9,3 +9,6 @@ build/
 .idea/
 
 *.iml
+
+coverage/
+lcov.info
