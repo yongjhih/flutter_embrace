@@ -410,6 +410,36 @@ void main() {
     );
   });
 
+  test('throwError', () async {
+    expect(() => Embrace.throwError(), throwsA(isInstanceOf<StateError>()));
+  });
+
+  test('crashError', () async {
+    await Embrace.crashError(StateError('Error thrown by Embrace plugin'));
+    expect(
+      calls,
+      <Matcher>[isMethodCall('crash', arguments: {
+        'exception': 'Bad state: Error thrown by Embrace plugin',
+        'context': 'null',
+        'information': '',
+        'stackTraceElements': const [],
+      })],
+    );
+  });
+
+  test('crashFlutter', () async {
+    await Embrace.crashFlutter(FlutterErrorDetails(exception: StateError('FlutterError thrown by Embrace plugin')));
+    expect(
+      calls,
+      <Matcher>[isMethodCall('crash', arguments: {
+        'exception': 'Bad state: FlutterError thrown by Embrace plugin',
+        'context': 'null',
+        'information': '',
+        'stackTraceElements': const [],
+      })],
+    );
+  });
+
   test('initialize', () async {
     Embrace.initialize();
     expect(HttpOverrides.current.runtimeType, EmbraceHttpOverrides);
@@ -531,20 +561,46 @@ void main() {
       final args = as<Map<dynamic, dynamic>>(it.arguments);
       return args['url'] == "https://example.com/#EmbraceIoHttpClient.get()";
     });
-
-    client.autoUncompress = client.autoUncompress;
-    client.connectionTimeout = client.connectionTimeout;
-    client.idleTimeout = client.idleTimeout;
-    client.maxConnectionsPerHost = client.maxConnectionsPerHost;
-    client.userAgent = client.userAgent;
-    client.autoUncompress = client.autoUncompress;
-    client.connectionTimeout = client.connectionTimeout;
-    client.idleTimeout = client.idleTimeout;
-    client.maxConnectionsPerHost = client.maxConnectionsPerHost;
-    client.findProxy = (_) => null;
     final args = as<Map<dynamic, dynamic>>(call.arguments);
     expect(args['method'], "GET");
     expect(args['statusCode'], 200);
+
+    client.autoUncompress = true;
+    verify(mockClient.autoUncompress = true);
+    when<bool>(mockClient.autoUncompress)
+        .thenAnswer((_) => true);
+    expect(client.autoUncompress, true);
+
+    client.connectionTimeout = Duration.zero;
+    verify(mockClient.connectionTimeout = Duration.zero);
+    when<Duration>(mockClient.connectionTimeout)
+        .thenAnswer((_) => Duration.zero);
+    expect(client.connectionTimeout, Duration.zero);
+
+    client.idleTimeout = Duration.zero;
+    verify(mockClient.idleTimeout = Duration.zero);
+    when<Duration>(mockClient.idleTimeout)
+        .thenAnswer((_) => Duration.zero);
+    expect(client.idleTimeout, Duration.zero);
+
+    client.maxConnectionsPerHost = 0;
+    verify(mockClient.maxConnectionsPerHost = 0);
+    when<int>(mockClient.maxConnectionsPerHost)
+        .thenAnswer((_) => 0);
+    expect(client.maxConnectionsPerHost, 0);
+
+    client.userAgent = "";
+    verify(mockClient.userAgent = "");
+    when<String>(mockClient.userAgent)
+        .thenAnswer((_) => "");
+    expect(client.userAgent, "");
+
+    client.findProxy = (_) => null;
+    client.addCredentials(Uri.parse("https://example.com/"), "", null);
+    client.addProxyCredentials("example.com", 443, "", null);
+    client.authenticate = (_, __, ___) async => false;
+    client.authenticateProxy = (_, __, ___, ____) async => false;
+    client.badCertificateCallback = (_, __, ___) => false;
 
     mockRequest.close();
     client.close();
