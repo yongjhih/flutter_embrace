@@ -494,11 +494,9 @@ class EmbraceHttpOverrides extends HttpOverrides {
 
   @override
   HttpClient createHttpClient(SecurityContext context) {
-    final client = createHttpClientFn != null
+    return EmbraceIoHttpClient(client: createHttpClientFn != null
         ? createHttpClientFn(context)
-        : current?.createHttpClient(context) ?? super.createHttpClient(context);
-
-    return Platform.isAndroid ? EmbraceIoHttpClient(client: client): client;
+        : current?.createHttpClient(context) ?? super.createHttpClient(context));
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_embrace/utils.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_embrace/flutter_embrace.dart';
 import 'package:http/http.dart';
+import 'package:http/testing.dart';
 import 'package:mockito/mockito.dart';
 
 void main() {
@@ -432,10 +434,60 @@ void main() {
     expect(onPageCalled, 3);
   });
   test('EmbraceHttpClient', () async {
+    final mockClient = MockClient((req) async {
+      return Response(json.encode({}), 200);
+    });
+    final client = EmbraceHttpClient(client: mockClient);
+    await client.get("http://example.com/#EmbraceHttpClient");
+    final call = calls
+        .where((it) => it.method == "logNetworkCall")
+        .firstWhere((it) {
+          final args = as<Map<dynamic, dynamic>>(it.arguments);
+          return args['url'] == "http://example.com/#EmbraceHttpClient";
+        });
+    final args = as<Map<dynamic, dynamic>>(call.arguments);
+    expect(args['method'], "GET");
+    expect(args['statusCode'], 200);
   });
   test('EmbraceIoHttpClient', () async {
+    final mockClient = MockHttpClient();
+    final mockRequest = MockHttpClientRequest();
+    final mockResponse = MockHttpClientResponse();
+    when<dynamic>(mockRequest.done)
+        .thenAnswer((_) async => mockResponse);
+    when<Uri>(mockRequest.uri)
+        .thenAnswer((_) => Uri.parse("https://example.com/#EmbraceIoHttpClient"));
+    when<String>(mockRequest.method)
+        .thenAnswer((_) => "GET");
+    when<int>(mockRequest.contentLength)
+        .thenAnswer((_) => 0);
+    when<int>(mockResponse.statusCode)
+        .thenAnswer((_) => 200);
+    when<int>(mockResponse.contentLength)
+        .thenAnswer((_) => 0);
+    HttpOverrides.global = SimpleHttpOverrides(mockClient);
+    when<dynamic>(mockClient.get("example.com", 80, "/#EmbraceIoHttpClient"))
+        .thenAnswer((_) async => mockRequest);
+
+    final client = EmbraceIoHttpClient();
+    await client.get("example.com", 80, "/#EmbraceIoHttpClient");
+    final call = calls
+        .where((it) => it.method == "logNetworkCall")
+        .firstWhere((it) {
+      final args = as<Map<dynamic, dynamic>>(it.arguments);
+      return args['url'] == "http://example.com/#EmbraceIoHttpClient";
+    });
+    final args = as<Map<dynamic, dynamic>>(call.arguments);
+    expect(args['method'], "GET");
+    expect(args['statusCode'], 200);
+
+    mockRequest.close();
   });
   test('EmbraceHttpOverrides', () async {
+    final httpOverrides = EmbraceHttpOverrides();
+    expect(httpOverrides.createHttpClient(SecurityContext()).runtimeType, EmbraceIoHttpClient);
+    final httpOverrides2 = EmbraceHttpOverrides(createHttpClientFn: (context) => HttpClient());
+    expect(httpOverrides2.createHttpClient(SecurityContext()).runtimeType, EmbraceIoHttpClient);
   });
 }
 
@@ -447,3 +499,16 @@ class MockHttpClientResponse extends Mock implements HttpClientResponse {}
 class MockBaseResponse extends Mock implements BaseResponse {}
 class MockBaseRequest extends Mock implements BaseRequest {}
 class MockStackTrace extends Mock implements StackTrace {}
+class MockHttpClient extends Mock implements HttpClient {}
+
+T as<T>(dynamic it) => it is T ? it : null;
+
+class SimpleHttpOverrides extends HttpOverrides {
+  final HttpClient client;
+  SimpleHttpOverrides(this.client);
+
+  @override
+  HttpClient createHttpClient(SecurityContext context) {
+    return client;
+  }
+}
