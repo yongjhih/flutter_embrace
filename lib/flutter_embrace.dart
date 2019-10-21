@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart';
+
 import 'utils.dart';
 
 class Embrace {
@@ -106,9 +107,7 @@ class Embrace {
     });
 
   static void initialize() {
-    if (Platform.isAndroid) {
-      HttpOverrides.global = EmbraceHttpOverrides(current: HttpOverrides.current);
-    }
+    HttpOverrides.global = EmbraceHttpOverrides(current: HttpOverrides.current);
   }
 
   static Future<void> logView(String name) async => await _channel.invokeMethod('logView', name);
