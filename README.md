@@ -10,7 +10,7 @@ MaterialApp(
 );
 ```
 
-More APIs for flutter: https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart
+More APIs for flutter: https://pub.dev/documentation/flutter_embrace/latest/flutter_embrace/Embrace-class.html
 
 EmbraceLogTree for Fimber: https://gist.github.com/yongjhih/9a203147eda126a407e2ed6cb841cae3
 
