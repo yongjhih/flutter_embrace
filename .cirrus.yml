@@ -1,0 +1,8 @@
+# ref. https://cirrus-ci.org/examples/#flutter
+container:
+  image: cirrusci/flutter:latest
+
+test_task:
+  pub_cache:
+    folder: ~/.pub-cache
+  test_script: flutter test
