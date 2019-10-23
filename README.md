@@ -1,6 +1,7 @@
 [![pub package](https://img.shields.io/pub/v/flutter_embrace.svg)](https://pub.dev/packages/flutter_embrace)
 [![Build Status](https://api.cirrus-ci.com/github/yongjhih/flutter_embrace.svg)](https://cirrus-ci.com/github/yongjhih/flutter_embrace)
 <!--[![Build Status](https://travis-ci.org/yongjhih/flutter_embrace.svg?branch=master)](https://travis-ci.org/yongjhih/flutter_embrace)-->
+[![codecov](https://codecov.io/gh/yongjhih/flutter_embrace/branch/master/graph/badge.svg)](https://codecov.io/gh/yongjhih/flutter_embrace)
 
 # flutter_embrace
 
