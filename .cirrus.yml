@@ -3,6 +3,8 @@ container:
   image: cirrusci/flutter:latest
 
 test_task:
+  env:
+    CODECOV_TOKEN: 0515984a-16cd-4ff7-ae25-5baf23c89976
   pub_cache:
     folder: ~/.pub-cache
   test_script: flutter test --coverage && bash <(curl -s https://codecov.io/bash) -c -f coverage/lcov.info
