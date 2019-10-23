@@ -1,6 +1,7 @@
 [![pub package](https://img.shields.io/pub/v/flutter_embrace.svg)](https://pub.dev/packages/flutter_embrace)
 [![Build Status](https://api.cirrus-ci.com/github/yongjhih/flutter_embrace.svg)](https://cirrus-ci.com/github/yongjhih/flutter_embrace)
 [![codecov](https://codecov.io/gh/yongjhih/flutter_embrace/branch/master/graph/badge.svg)](https://codecov.io/gh/yongjhih/flutter_embrace)
+[![apidoc](https://img.shields.io/github/tag/yongjhih/flutter_embrace.svg?label=apidoc)](https://pub.dev/documentation/flutter_embrace/latest/)
 
 # flutter_embrace
 
@@ -14,7 +15,7 @@ MaterialApp(
 );
 ```
 
-More APIs for flutter: https://pub.dev/documentation/flutter_embrace/latest/flutter_embrace/Embrace-class.html
+More APIs for flutter: [![apidoc](https://img.shields.io/github/tag/yongjhih/flutter_embrace.svg?label=apidoc)](https://pub.dev/documentation/flutter_embrace/latest/flutter_embrace/Embrace-class.html)
 
 EmbraceLogTree for Fimber: https://gist.github.com/yongjhih/9a203147eda126a407e2ed6cb841cae3
 
