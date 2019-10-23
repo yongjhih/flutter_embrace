@@ -5,4 +5,4 @@ container:
 test_task:
   pub_cache:
     folder: ~/.pub-cache
-  test_script: flutter test
+  test_script: flutter test --coverage && bash <(curl -s https://codecov.io/bash) -c -f coverage/lcov.info
