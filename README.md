@@ -2,6 +2,7 @@
 [![Build Status](https://api.cirrus-ci.com/github/yongjhih/flutter_embrace.svg)](https://cirrus-ci.com/github/yongjhih/flutter_embrace)
 [![codecov](https://codecov.io/gh/yongjhih/flutter_embrace/branch/master/graph/badge.svg)](https://codecov.io/gh/yongjhih/flutter_embrace)
 [![apidoc](https://img.shields.io/github/tag/yongjhih/flutter_embrace.svg?label=apidoc)](https://pub.dev/documentation/flutter_embrace/latest/)
+[![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/yongjhih?locale.x=en_US)
 
 # flutter_embrace
 
