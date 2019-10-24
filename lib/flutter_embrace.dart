@@ -57,17 +57,17 @@ class Embrace {
     bytesReceived: response.contentLength,
   );
 
-  static Future<void> logNetworkResponse(BaseResponse res, {
+  static Future<void> logNetworkResponse(BaseResponse response, {
     DateTime startTime,
     DateTime endTime,
   }) async => await logNetworkCall(
-      url: res.request.url.toString(),
-      method: res.request.method,
-      statusCode: res.statusCode,
+      url: response.request.url.toString(),
+      method: response.request.method,
+      statusCode: response.statusCode,
       startTime: startTime,
       endTime: endTime,
-      bytesSent: res.request.contentLength,
-      bytesReceived: res.contentLength,
+      bytesSent: response.request.contentLength,
+      bytesReceived: response.contentLength,
     );
 
   static Future<void> logNetworkCall({
