@@ -4,7 +4,8 @@
 [![apidoc](https://img.shields.io/github/tag/yongjhih/flutter_embrace.svg?label=apidoc)](https://pub.dev/documentation/flutter_embrace/latest/)
 [![Donate](https://img.shields.io/badge/Donate-PayPal-blue.svg)](https://paypal.me/yongjhih?locale.x=en_US)
 
-# flutter_embrace
+# Embrace for Flutter
+
 
 ## Usage
 
