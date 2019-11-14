@@ -57,7 +57,7 @@ build.gradle
 
 ```gradle
 dependencies {
-    implementation "embrace-io:embrace-android-sdk:3.4.0"
+    implementation "embrace-io:embrace-android-sdk:3.7.2"
 }
 ```
 
