@@ -1,3 +1,7 @@
+## 0.0.9
+
+* Add test cases
+
 ## 0.0.8
 
 * Implement EmbraceRouteObserver() and add more APIs
