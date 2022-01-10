@@ -55,7 +55,7 @@ class _HomeScreen extends State<HomeScreen> {
       } catch (err) {
       }
       try {
-        final res = await _client.get("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L1");
+        final res = await _client.get(Uri.parse("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L1"));
         print("url: ${res.request.url}");
         print("url.hasFragment: ${res.request.url.hasFragment}");
         print("url.fragment: ${res.request.url.fragment}");
@@ -139,7 +139,7 @@ class _Screen2 extends State<Screen2> {
 
     Future.delayed(Duration.zero, () async {
       try {
-        final res = await _client.get("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L2");
+        final res = await _client.get(Uri.parse("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L2"));
         print("url: ${res.request.url}");
         print("url.hasFragment: ${res.request.url.hasFragment}");
         print("url.fragment: ${res.request.url.fragment}");
@@ -201,7 +201,7 @@ class _Screen3 extends State<Screen3> {
 
     Future.delayed(Duration.zero, () async {
       try {
-        final res = await _client.get("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L3");
+        final res = await _client.get(Uri.parse("https://github.com/yongjhih/flutter_embrace/blob/master/lib/flutter_embrace.dart#L3"));
         print("url: ${res.request.url}");
         print("url.hasFragment: ${res.request.url.hasFragment}");
         print("url.fragment: ${res.request.url.fragment}");

@@ -477,7 +477,7 @@ void main() {
     await client.put("https://example.com/#EmbraceHttpClient.put()");
     await client.post("https://example.com/#EmbraceHttpClient.post()");
     await client.patch("https://example.com/#EmbraceHttpClient.patch()");
-    await client.delete("https://example.com/#EmbraceHttpClient.delete()");
+    await client.delete(Uri.parse("https://example.com/#EmbraceHttpClient.delete()"));
     await client.head("https://example.com/#EmbraceHttpClient.head()");
     await client.send(Request("GET", Uri.parse("https://example.com/#EmbraceHttpClient.get()")));
     await client.read("https://example.com/#EmbraceHttpClient.read()");

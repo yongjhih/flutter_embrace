@@ -209,7 +209,7 @@ class EmbraceHttpClient implements Client {
   EmbraceHttpClient({Client client}) : client = client ?? Client();
 
   @override
-  Future<Response> delete(dynamic url, {Map<String, String> headers}) {
+  Future<Response> delete(Uri url, {Object body, Encoding encoding, Map<String, String> headers}) {
     final startTime = DateTime.now();
     return client.delete(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
