@@ -9,13 +9,28 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
 class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler {
+  var channel: MethodChannel? = null
+
   companion object {
     @JvmStatic
     fun registerWith(registrar: Registrar) {
-      val channel = MethodChannel(registrar.messenger(), "flutter_embrace")
-      Log.d(TAG, "registerWith: flutter_embrace")
+      channel = MethodChannel(registrar.messenger(), "flutter_embrace")
+      Log.d(TAG, "registerWith: test flutter_embrace")
+      Log.d(TAG, "registerWith: FlutterEmbracePlugin(registrar) null: "+(FlutterEmbracePlugin(registrar) == null))
+      Log.d(TAG, "registerWith: flutter registrar null: "+(registrar == null))
       channel.setMethodCallHandler(FlutterEmbracePlugin(registrar))
     }
+  }
+
+  override fun onAttachedToEngine(@NonNull binding: FlutterPluginBinding) {
+    channel = MethodChannel(binding.getBinaryMessenger(), "flutter_embrace")
+    context = binding.getApplicationContext()
+    channel.setMethodCallHandler(this)
+  }
+
+  override fun onDetachedFromEngine(@NonNull binding: FlutterPluginBinding?) {
+    channel.setMethodCallHandler(null)
+    channel = null
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
