@@ -14,7 +14,6 @@ class FlutterEmbracePlugin(): FlutterPlugin, MethodCallHandler {
   var channel: MethodChannel? = null
 
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    Log.d(TAG, "onAttachedToEngine: attaching flutter_embrace")
     channel = MethodChannel(binding.getBinaryMessenger(), "flutter_embrace")
     channel?.setMethodCallHandler(this)
   }
