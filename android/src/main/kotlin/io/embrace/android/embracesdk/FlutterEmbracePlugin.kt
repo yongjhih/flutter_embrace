@@ -8,28 +8,18 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class FlutterEmbracePlugin(private val registrar: Registrar): MethodCallHandler {
+class FlutterEmbracePlugin(): FlutterPlugin, MethodCallHandler {
+  private var registrar: Registrar? = null
   var channel: MethodChannel? = null
 
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: Registrar) {
-      channel = MethodChannel(registrar.messenger(), "flutter_embrace")
-      Log.d(TAG, "registerWith: test flutter_embrace")
-      Log.d(TAG, "registerWith: FlutterEmbracePlugin(registrar) null: "+(FlutterEmbracePlugin(registrar) == null))
-      Log.d(TAG, "registerWith: flutter registrar null: "+(registrar == null))
-      channel.setMethodCallHandler(FlutterEmbracePlugin(registrar))
-    }
-  }
-
-  override fun onAttachedToEngine(@NonNull binding: FlutterPluginBinding) {
+  override fun onAttachedToEngine(binding: FlutterPluginBinding) {
+    Log.d(TAG, "onAttachedToEngine: attaching flutter_embrace")
     channel = MethodChannel(binding.getBinaryMessenger(), "flutter_embrace")
-    context = binding.getApplicationContext()
-    channel.setMethodCallHandler(this)
+    channel?.setMethodCallHandler(this)
   }
 
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPluginBinding?) {
-    channel.setMethodCallHandler(null)
+  override fun onDetachedFromEngine(binding: FlutterPluginBinding) {
+    channel?.setMethodCallHandler(null)
     channel = null
   }
 
