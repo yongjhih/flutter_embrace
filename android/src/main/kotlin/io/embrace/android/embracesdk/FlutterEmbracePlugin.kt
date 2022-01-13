@@ -7,6 +7,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 
 class FlutterEmbracePlugin(): FlutterPlugin, MethodCallHandler {
   private var registrar: Registrar? = null
@@ -30,11 +31,11 @@ class FlutterEmbracePlugin(): FlutterPlugin, MethodCallHandler {
           Log.d(TAG, "start: $enableIntegrationTesting")
           enableIntegrationTesting?.let {
             result.complete {
-              Embrace.getInstance().start(registrar.activity().application, it)
+              Embrace.getInstance().start(registrar?.activity()?.application, it)
             }
           } ?:
           result.complete {
-            Embrace.getInstance().start(registrar.activity().application)
+            Embrace.getInstance().start(registrar?.activity()?.application)
           }
         }
         /*
