@@ -240,9 +240,9 @@ class FlutterEmbracePlugin(): FlutterPlugin, MethodCallHandler {
 //            Embrace.getInstance().logWarning("Log 5: "+message, newMap as Map<String, String>)
 //            Embrace.getInstance().logError("Log 6: "+message, null, false, stackTraceElementMaps.toString(), true)
 
-//              throw Exception(message).apply {
-//                stackTrace = stackTraceElementMaps.mapNotNull { stackTraceElement(it) }.toTypedArray()
-//              }
+              throw Exception(message).apply {
+                stackTrace = stackTraceElementMaps.mapNotNull { stackTraceElement(it) }.toTypedArray()
+              }
           }.run()
         }
       }
