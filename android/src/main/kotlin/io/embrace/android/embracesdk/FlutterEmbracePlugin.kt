@@ -219,30 +219,15 @@ class FlutterEmbracePlugin(): FlutterPlugin, MethodCallHandler {
         ) { message, stackTraceElementMaps ->
           Thread {
 
-            for(mapListed in map){
-              newMap.putAll(mapListed)
+            val properties = HashMap<String, Any?>()
+            properties["errorLog"] = message
+            properties["stack"] = stackTraceElementMaps.toString()
+
+            Embrace.getInstance().logError("FlutterException", properties)
+
+            throw Exception(message).apply {
+              stackTrace = stackTraceElementMaps.mapNotNull { stackTraceElement(it) }.toTypedArray()
             }
-
-            var listOfElements = mutableListOf<StackTraceElement>()
-            for(element in stackTraceElementMaps){
-              val newElement = stackTraceElement(element)
-              listOfElements.add(newElement)
-            }
-
-            val throwable = Throwable()
-            throwable.stackTrace = listOfElements.toTypedArray()
-
-            // The below doesn't work as expected with embrace-io:embrace-android-sdk:4.5.0
-//            Embrace.getInstance().logError("Log 1: "+message, null, false, stackTraceElementMaps.toString())
-//            Embrace.getInstance().logError("Log 2: "+message, newMap as Map<String, String>)
-//            Embrace.getInstance().logError(throwable, "Log 3: "+message, null, false)
-//            Embrace.getInstance().logError(throwable, "Log 4: "+message, newMap as Map<String, String>, false)
-//            Embrace.getInstance().logWarning("Log 5: "+message, newMap as Map<String, String>)
-//            Embrace.getInstance().logError("Log 6: "+message, null, false, stackTraceElementMaps.toString(), true)
-
-              throw Exception(message).apply {
-                stackTrace = stackTraceElementMaps.mapNotNull { stackTraceElement(it) }.toTypedArray()
-              }
           }.run()
         }
       }
