@@ -17,8 +17,8 @@ class Embrace {
   @visibleForTesting
   static const MethodChannel channel = _channel;
 
-  static Future<bool> get isStarted async => await _channel.invokeMethod('isStarted');
-  static Future<void> start({bool enableIntegrationTesting}) async => await _channel.invokeMethod('start', enableIntegrationTesting);
+  static Future<bool?> get isStarted async => await _channel.invokeMethod('isStarted');
+  static Future<void> start({bool? enableIntegrationTesting}) async => await _channel.invokeMethod('start', enableIntegrationTesting);
   static Future<void> setUserIdentifier(String id) async => await _channel.invokeMethod('setUserIdentifier', id);
   static Future<void> setUsername(String name) async => await _channel.invokeMethod('setUsername', name);
   static Future<void> setUserEmail(String email) async => await _channel.invokeMethod('setUserEmail', email);
@@ -36,8 +36,8 @@ class Embrace {
   static Future<void> endSession() async => await _channel.invokeMethod('endSession');
   static Future<void> clearUserIdentifier() async => await _channel.invokeMethod('clearUserIdentifier');
   static Future<void> logNetworkIoRequest(HttpClientRequest request, {
-    DateTime startTime,
-    DateTime endTime,
+    DateTime? startTime,
+    DateTime? endTime,
   }) async {
     startTime ??= DateTime.now();
     final response = await request.done;
@@ -45,8 +45,8 @@ class Embrace {
   }
 
   static Future<void> logNetworkIoRequestResponse(HttpClientRequest request, HttpClientResponse response, {
-    DateTime startTime,
-    DateTime endTime,
+    DateTime? startTime,
+    DateTime? endTime,
   }) async => await logNetworkCall(
     url: request.uri.toString(),
     method: request.method,
@@ -58,29 +58,29 @@ class Embrace {
   );
 
   static Future<void> logNetworkResponse(BaseResponse response, {
-    DateTime startTime,
-    DateTime endTime,
+    DateTime? startTime,
+    DateTime? endTime,
   }) async => await logNetworkCall(
-      url: response.request.url.toString(),
-      method: response.request.method,
+      url: response.request!.url.toString(),
+      method: response.request!.method,
       statusCode: response.statusCode,
       startTime: startTime,
       endTime: endTime,
-      bytesSent: response.request.contentLength,
+      bytesSent: response.request!.contentLength,
       bytesReceived: response.contentLength,
     );
 
   static Future<void> logNetworkCall({
-    @required
+    required
     String url,
-    @required
+    required
     String method,
-    @required
+    required
     int statusCode,
-    DateTime startTime,
-    DateTime endTime,
-    int bytesSent = 0,
-    int bytesReceived = 0,
+    DateTime? startTime,
+    DateTime? endTime,
+    int? bytesSent = 0,
+    int? bytesReceived = 0,
   }) async => await _channel.invokeMethod('logNetworkCall', {
       "url": url,
       "method": method,
@@ -92,12 +92,12 @@ class Embrace {
     });
 
   static Future<void> logNetworkError({
-    @required
+    required
     String url,
-    @required
+    required
     String method,
-    DateTime startTime,
-    DateTime endTime,
+    DateTime? startTime,
+    DateTime? endTime,
     String errorType = "",
     String errorMessage = "",
   }) async => await _channel.invokeMethod('logNetworkError', {
@@ -113,7 +113,7 @@ class Embrace {
     HttpOverrides.global = EmbraceHttpOverrides(current: HttpOverrides.current);
   }
 
-  static Future<void> logView(String name) async => await _channel.invokeMethod('logView', name);
+  static Future<void> logView(String? name) async => await _channel.invokeMethod('logView', name);
   static Future<void> logWebView(String name) async => await _channel.invokeMethod('logWebView', name);
   static Future<void> forceLogView(String name) async => await _channel.invokeMethod('forceLogView', name);
   static Future<void> stop() async => await _channel.invokeMethod('stop');
@@ -125,7 +125,7 @@ class Embrace {
         context: details.context,
         information: details.informationCollector == null
             ? null
-            : details.informationCollector());
+            : details.informationCollector!());
   }
 
   /// Submits a report of a non-fatal error.
@@ -154,8 +154,8 @@ class Embrace {
   // occurred and give useful background information in [FlutterErrorDetails.informationCollector].
   // CrashService will log this information in addition to the stack trace.
   // If [information] is `null` or empty, it will be ignored.
-  static Future<void> _crash(dynamic exception, StackTrace stack,
-      {dynamic context, Iterable<DiagnosticsNode> information}) async {
+  static Future<void> _crash(dynamic exception, StackTrace? stack,
+      {dynamic context, Iterable<DiagnosticsNode>? information}) async {
     bool dry = false;
     final String _information = (information == null || information.isEmpty)
         ? ''
@@ -188,7 +188,7 @@ class Embrace {
       // English when following the word 'thrown'" according to the documentation for
       // [FlutterErrorDetails.context]. It is displayed to the user on CrashService
       // as the "reason", which is forced by iOS, with the "thrown" prefix added.
-      final String result = await _channel.invokeMethod<String>('crash', <String, dynamic>{
+      final String? result = await _channel.invokeMethod<String>('crash', <String, dynamic>{
         'exception': "${exception.toString()}",
         'context': "$context",
         'information': _information,
@@ -206,10 +206,10 @@ class EmbraceHttpClient implements Client {
 
   final Client client;
 
-  EmbraceHttpClient({Client client}) : client = client ?? Client();
+  EmbraceHttpClient({Client? client}) : client = client ?? Client();
 
   @override
-  Future<Response> delete(dynamic url, {Map<String, String> headers}) {
+  Future<Response> delete(Uri url, {Object? body, Encoding? encoding, Map<String, String>? headers}) {
     final startTime = DateTime.now();
     return client.delete(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
@@ -218,7 +218,7 @@ class EmbraceHttpClient implements Client {
   }
 
   @override
-  Future<Response> get(dynamic url, {Map<String, String> headers}) {
+  Future<Response> get(dynamic url, {Map<String, String>? headers}) {
     final startTime = DateTime.now();
     return client.get(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
@@ -227,7 +227,7 @@ class EmbraceHttpClient implements Client {
   }
 
   @override
-  Future<Response> head(dynamic url, {Map<String, String> headers}) {
+  Future<Response> head(dynamic url, {Map<String, String>? headers}) {
     final startTime = DateTime.now();
     return client.head(url, headers: headers).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
@@ -236,7 +236,7 @@ class EmbraceHttpClient implements Client {
   }
 
   @override
-  Future<Response> patch(dynamic url, {Map<String, String> headers, dynamic body, Encoding encoding}) {
+  Future<Response> patch(dynamic url, {Map<String, String>? headers, dynamic body, Encoding? encoding}) {
     final startTime = DateTime.now();
     return client.patch(url, headers: headers, encoding: encoding).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
@@ -245,7 +245,7 @@ class EmbraceHttpClient implements Client {
   }
 
   @override
-  Future<Response> post(dynamic url, {Map<String, String> headers, dynamic body, Encoding encoding}) {
+  Future<Response> post(dynamic url, {Map<String, String>? headers, dynamic body, Encoding? encoding}) {
     final startTime = DateTime.now();
     return client.post(url, headers: headers, encoding: encoding).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
@@ -254,7 +254,7 @@ class EmbraceHttpClient implements Client {
   }
 
   @override
-  Future<Response> put(dynamic url, {Map<String, String> headers, dynamic body, Encoding encoding}) {
+  Future<Response> put(dynamic url, {Map<String, String>? headers, dynamic body, Encoding? encoding}) {
     final startTime = DateTime.now();
     return client.put(url, headers: headers, encoding: encoding).then((response) {
       Embrace.logNetworkResponse(response, startTime: startTime);
@@ -263,14 +263,14 @@ class EmbraceHttpClient implements Client {
   }
 
   @override
-  Future<String> read(dynamic url, {Map<String, String> headers}) {
+  Future<String> read(dynamic url, {Map<String, String>? headers}) {
     return client.read(url, headers: headers).then((res) {
       return res;
     });
   }
 
   @override
-  Future<Uint8List> readBytes(dynamic url, {Map<String, String> headers}) {
+  Future<Uint8List> readBytes(dynamic url, {Map<String, String>? headers}) {
     return client.readBytes(url, headers: headers).then((res) {
       return res;
     });
@@ -296,37 +296,37 @@ class EmbraceIoHttpClient implements HttpClient {
 
   final HttpClient client;
 
-  EmbraceIoHttpClient({HttpClient client}) : client = client ?? HttpClient();
+  EmbraceIoHttpClient({HttpClient? client}) : client = client ?? HttpClient();
 
   @override
   set autoUncompress(bool au) => client.autoUncompress = au;
 
   @override
-  set connectionTimeout(Duration ct) => client.connectionTimeout = ct;
+  set connectionTimeout(Duration? ct) => client.connectionTimeout = ct;
 
   @override
   set idleTimeout(Duration it) => client.idleTimeout = it;
 
   @override
-  set maxConnectionsPerHost(int mcph) => client.maxConnectionsPerHost = mcph;
+  set maxConnectionsPerHost(int? mcph) => client.maxConnectionsPerHost = mcph;
 
   @override
-  set userAgent (String ua) => client.userAgent = ua;
+  set userAgent (String? ua) => client.userAgent = ua;
 
   @override
   bool get autoUncompress => client.autoUncompress;
 
   @override
-  Duration get connectionTimeout => client.connectionTimeout;
+  Duration? get connectionTimeout => client.connectionTimeout;
 
   @override
   Duration get idleTimeout => client.idleTimeout;
 
   @override
-  int get maxConnectionsPerHost => client.maxConnectionsPerHost;
+  int? get maxConnectionsPerHost => client.maxConnectionsPerHost;
 
   @override
-  String get userAgent => client.userAgent;
+  String? get userAgent => client.userAgent;
 
   @override
   void addCredentials(
@@ -342,20 +342,20 @@ class EmbraceIoHttpClient implements HttpClient {
 
   @override
   set authenticate(
-      Future<bool> Function(Uri url, String scheme, String realm) f) {
+      Future<bool> Function(Uri url, String scheme, String? realm)? f) {
     client.authenticate = f;
   }
 
   @override
   set authenticateProxy(
-      Future<bool> Function(String host, int port, String scheme, String realm)
+      Future<bool> Function(String host, int port, String scheme, String? realm)?
       f) {
     client.authenticateProxy = f;
   }
 
   @override
   set badCertificateCallback(
-      bool Function(X509Certificate cert, String host, int port) callback) {
+      bool Function(X509Certificate cert, String host, int port)? callback) {
     client.badCertificateCallback = callback;
   }
 
@@ -381,8 +381,8 @@ class EmbraceIoHttpClient implements HttpClient {
   }
 
   @override
-  set findProxy(String Function(Uri url) f) {
-    client.findProxy = f;
+  set findProxy(String? Function(Uri url)? f) {
+    client.findProxy = f as String Function(Uri)?;
   }
 
   @override
@@ -484,10 +484,10 @@ class EmbraceIoHttpClient implements HttpClient {
 }
 
 class EmbraceHttpOverrides extends HttpOverrides {
-  final String Function(Uri url, Map<String, String> environment)
+  final String Function(Uri? url, Map<String, String>? environment)?
   findProxyFromEnvironmentFn;
-  final HttpClient Function(SecurityContext context) createHttpClientFn;
-  final HttpOverrides current;
+  final HttpClient Function(SecurityContext? context)? createHttpClientFn;
+  final HttpOverrides? current;
 
   EmbraceHttpOverrides({
     this.current,
@@ -496,17 +496,17 @@ class EmbraceHttpOverrides extends HttpOverrides {
   });
 
   @override
-  HttpClient createHttpClient(SecurityContext context) {
+  HttpClient createHttpClient(SecurityContext? context) {
     return EmbraceIoHttpClient(client: createHttpClientFn != null
-        ? createHttpClientFn(context)
+        ? createHttpClientFn!(context)
         : current?.createHttpClient(context) ?? super.createHttpClient(context));
   }
 
   @override
-  String findProxyFromEnvironment(Uri url, Map<String, String> environment) {
+  String findProxyFromEnvironment(Uri? url, Map<String, String>? environment) {
     return findProxyFromEnvironmentFn != null
-        ? findProxyFromEnvironmentFn(url, environment)
-        : super.findProxyFromEnvironment(url, environment);
+        ? findProxyFromEnvironmentFn!(url, environment)
+        : super.findProxyFromEnvironment(url!, environment);
   }
 }
 
